@@ -2,11 +2,13 @@
   "development": {
     "title": "Earthquake Tracker",
     "host": "0.0.0.0",
-    "port": 8080
+    "port": 8080,
+    "mapAccessToken": "pk.eyJ1IjoidmpjYWdheSIsImEiOiJja2Zxb2tjdzMwOHVhMnRyeHpiNXRxNGkyIn0.LKOAJAxnnqanVvwT0_mvMw"
   },
   "production": {
     "title": "Earthquake Tracker",
     "host": "0.0.0.0",
-    "port": 8080
+    "port": 8080,
+    "mapAccessToken": "pk.eyJ1IjoidmpjYWdheSIsImEiOiJja2Zxb2tjdzMwOHVhMnRyeHpiNXRxNGkyIn0.LKOAJAxnnqanVvwT0_mvMw"
   }
 }

@@ -3,7 +3,7 @@ import CompressionWebpackPlugin from "compression-webpack-plugin";
 import HTMLWebpackPlugin from "html-webpack-plugin";
 import HTMLWebpackTagsPlugin from "html-webpack-tags-plugin";
 import { join, resolve } from "path";
-import { Configuration, DllReferencePlugin } from "webpack";
+import { Configuration, DefinePlugin, DllReferencePlugin } from "webpack";
 
 import { production } from "../app.config.json";
 
@@ -19,6 +19,9 @@ const config = (dirPath: string): Configuration => {
       new CleanWebpackPlugin({
         cleanOnceBeforeBuildPatterns: [join(dirPath, "/dist/app.*.*"), join(dirPath, "/dist/styles.*.*")],
         verbose: true,
+      }),
+      new DefinePlugin({
+        __MAP_ACCESS_TOKEN__: JSON.stringify(production.mapAccessToken),
       }),
       new DllReferencePlugin({
         context: ".",

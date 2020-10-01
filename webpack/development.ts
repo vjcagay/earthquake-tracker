@@ -2,7 +2,7 @@ import ReactRefreshWebpackPlugin from "@pmmmwh/react-refresh-webpack-plugin";
 import HTMLWebpackPlugin from "html-webpack-plugin";
 import HTMLWebpackTagsPlugin from "html-webpack-tags-plugin";
 import { join, resolve } from "path";
-import { Configuration, DevtoolModuleFilenameTemplateInfo, DllReferencePlugin } from "webpack";
+import { Configuration, DefinePlugin, DevtoolModuleFilenameTemplateInfo, DllReferencePlugin } from "webpack";
 import { Configuration as DevServerConfig } from "webpack-dev-server";
 
 import { development } from "../app.config.json";
@@ -30,6 +30,9 @@ const config = (dirPath: string): Configuration => {
     },
     plugins: [
       new ReactRefreshWebpackPlugin(),
+      new DefinePlugin({
+        __MAP_ACCESS_TOKEN__: JSON.stringify(development.mapAccessToken),
+      }),
       new DllReferencePlugin({
         context: ".",
         manifest: resolve(join(dirPath, "/dev/libs-manifest.json")),

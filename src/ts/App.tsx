@@ -1,5 +1,7 @@
 import React from "react";
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
+
+import Map from "./components/Map";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -7,10 +9,19 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const App = () => (
-  <>
-    <GlobalStyle />
-  </>
-);
+const Container = styled.div`
+  height: 100vh;
+`;
+
+const App = () => {
+  return (
+    <>
+      <GlobalStyle />
+      <Container>
+        <Map />
+      </Container>
+    </>
+  );
+};
 
 export default App;
