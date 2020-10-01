@@ -1,0 +1,12 @@
+{
+  "development": {
+    "title": "Earthquake Tracker",
+    "host": "0.0.0.0",
+    "port": 8080
+  },
+  "production": {
+    "title": "Earthquake Tracker",
+    "host": "0.0.0.0",
+    "port": 8080
+  }
+}
