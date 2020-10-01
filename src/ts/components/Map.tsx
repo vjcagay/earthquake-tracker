@@ -2,18 +2,19 @@ import MapboxGL from "mapbox-gl";
 import React, { useLayoutEffect, useRef } from "react";
 import styled from "styled-components";
 
-const Container = styled.div`
-  height: 100%;
-`;
+interface Props {
+  className?: string;
+}
 
 MapboxGL.accessToken = __MAP_ACCESS_TOKEN__;
 
-const Map = () => {
+const Map = (props: Props) => {
   const container = useRef<HTMLDivElement>(null);
+
   useLayoutEffect(() => {
     const map = new MapboxGL.Map({
       container: container.current,
-      style: "mapbox://styles/mapbox/light-v10",
+      style: "mapbox://styles/mapbox/dark-v10",
     });
 
     navigator.geolocation?.getCurrentPosition(
@@ -28,10 +29,17 @@ const Map = () => {
       }
     );
 
+    map.addControl(
+      new MapboxGL.NavigationControl({
+        showZoom: true,
+      }),
+      "bottom-right"
+    );
+
     return () => map.remove();
   });
 
-  return <Container ref={container} />;
+  return <div className={props.className} ref={container} />;
 };
 
 export default Map;
