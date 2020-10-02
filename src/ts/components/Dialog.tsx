@@ -84,8 +84,10 @@ const Dialog = (props: Props) => {
             <li key={id}>
               <strong>{Math.round(properties.mag * 10) / 10}</strong>
               <div>
-                <p>{properties.place}</p>
-                <small>{dateToISO(new Date(properties.time))}</small>
+                <p title={properties.place}>{properties.place}</p>
+                <small>
+                  {dateToISO(new Date(properties.time))} {new Date(properties.time).toTimeString().split(" ")[0]}
+                </small>
               </div>
             </li>
           ))}
