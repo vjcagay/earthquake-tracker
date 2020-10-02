@@ -1,11 +1,78 @@
-import MapboxGL, { Map as MapboxMap, Marker } from "mapbox-gl";
+import MapboxGL, { Map as MapboxMap, Marker, Popup } from "mapbox-gl";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import dateToISO from "../utils/dateToISO";
 
 interface Props {
   className?: string;
   features?: Feature[];
 }
+
+const Container = styled.div`
+  &.mapboxgl-map {
+    font: initial;
+  }
+
+  .mapboxgl-popup-content {
+    background: rgba(238, 80, 61, 1);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+
+    button {
+      display: none;
+    }
+  }
+
+  .mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+    border-bottom-color: rgba(238, 80, 61, 1);
+  }
+
+  .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+    border-top-color: rgba(238, 80, 61, 1);
+  }
+
+  .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+    border-left-color: rgba(238, 80, 61, 1);
+  }
+
+  .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+    border-right-color: rgba(238, 80, 61, 1);
+  }
+`;
+
+const createMarker = (magnitude: number) => {
+  // We set that 50px is the biggest circle for the strongest earthquakes (mag: 10)
+  // Then round to the nearest pixel size
+  const size = Math.round((magnitude / 10) * 50);
+
+  const el = document.createElement("div");
+  el.style.cssText = `
+    width: ${size}px;
+    height: ${size}px;
+    border-radius: 50%;
+    background: rgba(238, 80, 61, 1);
+    box-shadow: 0 1px 4px 0px rgba(0,0,0,0.4);
+  `;
+  return el;
+};
+
+const createPopup = ({ properties }: Feature) => {
+  const popup = new Popup({ offset: 15 });
+  popup.setHTML(`
+    <b style="display: block; font-size: 24px; text-align: center;">
+      ${properties.mag}
+    </b>
+    <small style="display: block; text-align: center; margin: 8px 0;">
+      ${properties.place}
+    </small>
+    <small style="display: block; text-align: center;">
+      ${dateToISO(new Date(properties.time))} ${new Date(properties.time).toTimeString().split(" ")[0]}
+    </small>
+  `);
+  return popup;
+};
 
 MapboxGL.accessToken = __MAP_ACCESS_TOKEN__;
 
@@ -48,8 +115,11 @@ const Map = (props: Props) => {
   useEffect(() => {
     if (map) {
       const newMarkers = props.features.map((feature) => {
-        const [longitude, latitude] = feature.geometry.coordinates;
-        const marker = new Marker().setLngLat([longitude, latitude]);
+        const marker = new Marker({
+          element: createMarker(feature.properties.mag),
+        })
+          .setLngLat(feature.geometry.coordinates)
+          .setPopup(createPopup(feature));
         return marker;
       });
 
@@ -64,7 +134,7 @@ const Map = (props: Props) => {
     return () => markers.forEach((marker) => marker.remove());
   }, [markers]);
 
-  return <div className={props.className} ref={container} />;
+  return <Container className={props.className} ref={container} />;
 };
 
 export default Map;

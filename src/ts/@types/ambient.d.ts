@@ -2,7 +2,7 @@ declare var __MAP_ACCESS_TOKEN__: string;
 
 interface Feature {
   geometry: {
-    coordinates: number[];
+    coordinates: [number, number];
     type: "Point";
   };
   id: string;
