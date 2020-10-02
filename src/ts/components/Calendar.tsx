@@ -6,6 +6,7 @@ import dateToISO from "../utils/dateToISO";
 interface Props {
   className?: string;
   value?: Date;
+  onChange?: (value: Date) => void;
 }
 
 const Container = styled.div`
@@ -114,6 +115,7 @@ const Calendar = (props: Props) => {
         onSelect(value) {
           setValue(dateToISO(value));
           setOpen(false);
+          props.onChange?.(value);
         },
       });
       dropDown.current.appendChild(pikaday.el);
