@@ -117,6 +117,8 @@ const Map = (props: Props) => {
       "bottom-right"
     );
 
+    map.addControl(new MapboxGL.FullscreenControl({ container: document.body }));
+
     return () => map?.remove();
   }, []);
 
