@@ -19,10 +19,6 @@ const Container = styled.div`
     padding: 16px;
     box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.4);
     color: #ffffff;
-
-    button {
-      display: none;
-    }
   }
 
   .mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
@@ -59,7 +55,7 @@ const createMarker = (magnitude: number) => {
 };
 
 const createPopup = ({ properties }: Feature) => {
-  const popup = new Popup({ offset: 15 });
+  const popup = new Popup({ closeButton: false, offset: 15 });
   popup.setHTML(`
     <b style="display: block; font-size: 24px; text-align: center;">
       ${properties.mag}
