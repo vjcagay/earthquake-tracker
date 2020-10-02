@@ -35,7 +35,7 @@ const List = styled.ul`
 `;
 
 const ListItem = styled.li<{ selected?: boolean }>`
-  background: ${(props) => (props.selected ? "rgba(60, 60, 60, 1)" : "transparent")};
+  background: ${(props) => (props.selected ? "rgba(70, 70, 70, 1)" : "transparent")};
   display: flex;
   align-items: center;
   cursor: pointer;
