@@ -23,14 +23,15 @@ const Input = styled.input.attrs(() => ({ type: "text", readOnly: true }))`
   padding: 8px 12px;
   outline: none;
   cursor: pointer;
+  text-align: center;
 `;
 
 const DropDown = styled.div`
   position: absolute;
-  top: calc(100% - 12px);
+  top: 0;
   width: 100%;
-  padding: 12px;
-  border-radius: 0 0 12px 12px;
+  padding: 8px 12px 12px;
+  border-radius: 12px;
   background: rgba(70, 70, 70, 1);
 
   .pika-single {
