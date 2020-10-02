@@ -33,6 +33,7 @@ const DropDown = styled.div`
   padding: 8px 12px 12px;
   border-radius: 12px;
   background: rgba(70, 70, 70, 1);
+  box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.4);
 
   .pika-single {
     background: transparent;
