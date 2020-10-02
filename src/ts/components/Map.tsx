@@ -86,14 +86,14 @@ const Map = (props: Props) => {
     navigator.geolocation?.getCurrentPosition(
       ({ coords }) => {
         map.setCenter([coords.longitude, coords.latitude]);
-        map.setZoom(13);
       },
       () => {
-        // If position is not granted default to zoomed-out view
+        // If position is not granted default to lat 0 long 0
         map.setCenter([0, 0]);
-        map.setZoom(2);
       }
     );
+
+    map.setZoom(2);
 
     map.addControl(
       new MapboxGL.NavigationControl({
