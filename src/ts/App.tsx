@@ -49,6 +49,10 @@ const fetchFeatures = async (ISODate: string): Promise<Feature[]> => {
 
 const App = () => {
   const [features, setFeatures] = useState<Feature[]>([]);
+  const [selectedFeature, setSelectedFeature] = useState({
+    id: "",
+    centerMap: false,
+  });
   const [date, setDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
 
@@ -63,12 +67,20 @@ const App = () => {
     fetchData();
   }, [date]);
 
+  const onFeatureSelect = (feature: { id: string; centerMap: boolean }) => setSelectedFeature(feature);
+
   return (
     <>
       <GlobalStyle />
       <Container>
-        <MapStyled features={features} />
-        <DialogStyled features={features} loading={loading} onDateChange={(date) => setDate(date)} />
+        <MapStyled features={features} selectedFeature={selectedFeature} onFeatureSelect={onFeatureSelect} />
+        <DialogStyled
+          features={features}
+          loading={loading}
+          onDateChange={(date) => setDate(date)}
+          selectedFeature={selectedFeature}
+          onFeatureSelect={onFeatureSelect}
+        />
       </Container>
     </>
   );

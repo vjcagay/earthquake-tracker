@@ -6,6 +6,11 @@ import dateToISO from "../utils/dateToISO";
 interface Props {
   className?: string;
   features?: Feature[];
+  selectedFeature?: {
+    id: string;
+    centerMap: boolean;
+  };
+  onFeatureSelect?: (feature: { id: string; centerMap: boolean }) => void;
 }
 
 const Container = styled.div`
@@ -38,6 +43,13 @@ const Container = styled.div`
   }
 `;
 
+// Store the currently selected feature id for reference
+// When a new feature is selected we need to close the previous one's popup.
+let currentlySelectedFeature = {
+  id: "",
+  centerMap: false,
+};
+
 const createMarker = (magnitude: number) => {
   // We set that 50px is the biggest circle for the strongest earthquakes (mag: 10)
   // Then round to the nearest pixel size
@@ -54,7 +66,7 @@ const createMarker = (magnitude: number) => {
   return el;
 };
 
-const createPopup = ({ properties }: Feature) => {
+const createPopup = ({ id, properties }: Feature) => {
   const popup = new Popup({ closeButton: false, offset: 15 });
   popup.setHTML(`
     <b style="display: block; font-size: 24px; text-align: center;">
@@ -67,6 +79,9 @@ const createPopup = ({ properties }: Feature) => {
       ${dateToISO(new Date(properties.time))} ${new Date(properties.time).toTimeString().split(" ")[0]}
     </small>
   `);
+  popup.on("close", () => {
+    currentlySelectedFeature = { id: "", centerMap: false };
+  });
   return popup;
 };
 
@@ -116,6 +131,13 @@ const Map = (props: Props) => {
         })
           .setLngLat(feature.geometry.coordinates)
           .setPopup(createPopup(feature));
+
+        marker.getElement().setAttribute("data-id", feature.id);
+        marker.getElement().addEventListener("click", (event: Event) => {
+          event.stopPropagation();
+          props.onFeatureSelect?.({ id: feature.id, centerMap: false });
+        });
+
         return marker;
       });
 
@@ -129,6 +151,24 @@ const Map = (props: Props) => {
     // For each new set of markers, remove old ones
     return () => markers.forEach((marker) => marker.remove());
   }, [markers]);
+
+  useLayoutEffect(() => {
+    let marker: Marker;
+
+    const toggle = (featureId: string) => {
+      marker = markers.find((marker) => marker.getElement().getAttribute("data-id") === featureId);
+      marker?.togglePopup();
+    };
+
+    if (props.selectedFeature?.id) {
+      toggle(currentlySelectedFeature.id);
+      toggle(props.selectedFeature?.id);
+      props.selectedFeature?.centerMap && map?.flyTo({ center: marker?.getLngLat() });
+      currentlySelectedFeature = props.selectedFeature;
+    }
+
+    return () => toggle(currentlySelectedFeature.id);
+  }, [props.selectedFeature]);
 
   return <Container className={props.className} ref={container} />;
 };

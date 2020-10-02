@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import styled from "styled-components";
 import dateToISO from "../utils/dateToISO";
 import Calendar from "./Calendar";
@@ -8,6 +8,11 @@ interface Props {
   features?: Feature[];
   loading?: boolean;
   onDateChange?: (date: Date) => void;
+  selectedFeature?: {
+    id: string;
+    centerMap: boolean;
+  };
+  onFeatureSelect?: (feature: { id: string; centerMap: boolean }) => void;
 }
 
 const Container = styled.div`
@@ -27,44 +32,51 @@ const List = styled.ul`
   border-left: none;
   border-right: none;
   margin: 16px -16px;
+`;
 
-  li {
-    display: flex;
-    align-items: center;
+const ListItem = styled.li<{ selected?: boolean }>`
+  background: ${(props) => (props.selected ? "rgba(60, 60, 60, 1)" : "transparent")};
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  div {
+    flex-grow: 1;
+    min-width: 0;
     padding: 8px 16px 8px 0;
-    margin-left: 16px;
-
-    div {
-      flex-grow: 1;
-      min-width: 0;
-    }
-
-    strong,
-    p {
-      color: #ffffff;
-    }
-
-    strong {
-      display: inline-block;
-      width: 60px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    p {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    small {
-      color: rgba(170, 170, 170, 1);
-    }
   }
 
-  li:not(last-child) {
+  strong,
+  p {
+    color: #ffffff;
+  }
+
+  strong {
+    display: inline-block;
+    width: 60px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  small {
+    color: rgba(170, 170, 170, 1);
+  }
+
+  &:not(last-child) div {
     border-bottom: 1px solid rgba(80, 80, 80, 1);
   }
+`;
+
+const EmptyListItem = styled.li`
+  border-bottom: 1px solid rgba(80, 80, 80, 1);
+  padding: 8px 16px;
+  color: rgba(170, 170, 170, 1);
 `;
 
 const Notice = styled.small`
@@ -74,14 +86,35 @@ const Notice = styled.small`
 `;
 
 const Dialog = (props: Props) => {
+  const list = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    if (props.selectedFeature?.id) {
+      list.current.querySelector(`[data-id="${props.selectedFeature?.id}"]`).scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [props.selectedFeature]);
+
   return (
     <Container className={props.className}>
       <Calendar onChange={(date) => props.onDateChange?.(date)} />
-      <List>
+      <List ref={list}>
         {props.features.length > 0 &&
           !props.loading &&
           props.features.map(({ id, properties }) => (
-            <li key={id}>
+            <ListItem
+              key={id}
+              data-id={id}
+              onClick={() =>
+                props.onFeatureSelect?.({
+                  id,
+                  centerMap: true,
+                })
+              }
+              selected={props.selectedFeature?.id === id}
+            >
               <strong>{Math.round(properties.mag * 10) / 10}</strong>
               <div>
                 <p title={properties.place}>{properties.place}</p>
@@ -89,17 +122,21 @@ const Dialog = (props: Props) => {
                   {dateToISO(new Date(properties.time))} {new Date(properties.time).toTimeString().split(" ")[0]}
                 </small>
               </div>
-            </li>
+            </ListItem>
           ))}
         {!props.features.length && !props.loading && (
-          <li>
-            <small>Selected date has no records yet.</small>
-          </li>
+          <EmptyListItem>
+            <div>
+              <small>Selected date has no records yet.</small>
+            </div>
+          </EmptyListItem>
         )}
         {props.loading && (
-          <li>
-            <small>Loading data...</small>
-          </li>
+          <EmptyListItem>
+            <div>
+              <small>Loading data...</small>
+            </div>
+          </EmptyListItem>
         )}
       </List>
       <Notice>Only earthquakes over magnitude 3 are shown.</Notice>
