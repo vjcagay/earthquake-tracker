@@ -19,7 +19,7 @@ const Container = styled.div`
   }
 
   .mapboxgl-popup-content {
-    background: rgba(238, 80, 61, 1);
+    background: #ee503d;
     border-radius: 12px;
     padding: 16px;
     box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.4);
@@ -27,21 +27,30 @@ const Container = styled.div`
   }
 
   .mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
-    border-bottom-color: rgba(238, 80, 61, 1);
+    border-bottom-color: #ee503d;
   }
 
   .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
-    border-top-color: rgba(238, 80, 61, 1);
+    border-top-color: #ee503d;
   }
 
   .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
-    border-left-color: rgba(238, 80, 61, 1);
+    border-left-color: #ee503d;
   }
 
   .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
-    border-right-color: rgba(238, 80, 61, 1);
+    border-right-color: #ee503d;
   }
 `;
+
+// Use the correct map color scheme
+const getMapColorScheme = () => {
+  let scheme = "light";
+  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    scheme = "dark";
+  }
+  return `mapbox://styles/mapbox/${scheme}-v10`;
+};
 
 // Store the currently selected feature id for reference
 // When a new feature is selected we need to close the previous one's popup.
@@ -60,8 +69,8 @@ const createMarker = (magnitude: number) => {
     width: ${size}px;
     height: ${size}px;
     border-radius: 50%;
-    background: rgba(238, 80, 61, 1);
-    box-shadow: 0 1px 4px 0px rgba(0,0,0,0.4);
+    background: #ee503d;
+    box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.4);
   `;
   return el;
 };
@@ -95,7 +104,7 @@ const Map = (props: Props) => {
   useLayoutEffect(() => {
     map = new MapboxMap({
       container: container.current,
-      style: "mapbox://styles/mapbox/dark-v10",
+      style: getMapColorScheme(),
     });
 
     navigator.geolocation?.getCurrentPosition(
@@ -119,7 +128,16 @@ const Map = (props: Props) => {
 
     map.addControl(new MapboxGL.FullscreenControl({ container: document.body }));
 
-    return () => map?.remove();
+    const setMapColorScheme = () => {
+      map.setStyle(getMapColorScheme());
+    };
+
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", setMapColorScheme);
+
+    return () => {
+      window.matchMedia("(prefers-color-scheme: dark)").removeEventListener("change", setMapColorScheme);
+      map?.remove();
+    };
   }, []);
 
   const [markers, setMarkers] = useState<Marker[]>([]);

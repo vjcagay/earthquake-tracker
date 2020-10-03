@@ -18,8 +18,8 @@ const Input = styled.input.attrs(() => ({ type: "text", readOnly: true }))`
   border-radius: 12px;
   font-size: 16px;
   width: 100%;
-  background: rgba(70, 70, 70, 1);
-  color: rgba(170, 170, 170, 1);
+  background: var(--background-secondary);
+  color: var(--color-secondary);
   padding: 8px 12px;
   outline: none;
   cursor: pointer;
@@ -32,7 +32,7 @@ const DropDown = styled.div`
   width: 100%;
   padding: 8px 12px 12px;
   border-radius: 12px;
-  background: rgba(70, 70, 70, 1);
+  background: var(--background-secondary);
   box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.4);
 
   .pika-single {
@@ -42,7 +42,7 @@ const DropDown = styled.div`
 
   .pika-label {
     background-color: transparent;
-    color: rgba(170, 170, 170, 1);
+    color: var(--color-secondary);
   }
 
   .pika-lendar {
@@ -70,13 +70,13 @@ const DropDown = styled.div`
 
   .is-today .pika-button,
   .pika-button:hover {
-    color: rgba(170, 170, 170, 1);
+    color: var(--color-secondary);
   }
 
   .is-selected .pika-button {
-    background: rgba(170, 170, 170, 0.25);
+    background: var(--background-selected);
     box-shadow: none;
-    color: rgba(170, 170, 170, 1);
+    color: var(--color-secondary);
   }
 
   .is-selected:not(.is-today) .pika-button {
@@ -92,12 +92,12 @@ const DropDown = styled.div`
 
   .pika-prev::before {
     content: "◀";
-    color: rgba(170, 170, 170, 1);
+    color: var(--color-secondary);
   }
 
   .pika-next::before {
     content: "▶";
-    color: rgba(170, 170, 170, 1);
+    color: var(--color-secondary);
   }
 `;
 
@@ -109,7 +109,7 @@ const Controls = styled.div`
     border: none;
     outline: none;
     background: transparent;
-    color: rgba(170, 170, 170, 1);
+    color: var(--color-secondary);
     cursor: pointer;
   }
 `;

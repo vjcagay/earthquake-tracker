@@ -16,7 +16,7 @@ interface Props {
 }
 
 const Container = styled.div`
-  background: rgba(50, 50, 50, 0.9);
+  background: var(--background-primary);
   backdrop-filter: blur(4px);
   border-radius: 12px;
   box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.4);
@@ -28,14 +28,14 @@ const Container = styled.div`
 const List = styled.ul`
   flex-grow: 1;
   overflow: scroll;
-  border: 1px solid rgba(127, 127, 127, 1);
+  border: 1px solid var(--border-primary);
   border-left: none;
   border-right: none;
   margin: 16px -16px;
 `;
 
 const ListItem = styled.li<{ selected?: boolean }>`
-  background: ${(props) => (props.selected ? "rgba(70, 70, 70, 1)" : "transparent")};
+  background: ${(props) => (props.selected ? "var(--background-secondary)" : "transparent")};
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -48,7 +48,7 @@ const ListItem = styled.li<{ selected?: boolean }>`
 
   strong,
   p {
-    color: #ffffff;
+    color: var(--color-primary);
   }
 
   strong {
@@ -65,23 +65,23 @@ const ListItem = styled.li<{ selected?: boolean }>`
   }
 
   small {
-    color: rgba(170, 170, 170, 1);
+    color: var(--color-secondary);
   }
 
   &:not(last-child) div {
-    border-bottom: 1px solid rgba(80, 80, 80, 1);
+    border-bottom: 1px solid var(--border-secondary);
   }
 `;
 
 const EmptyListItem = styled.li`
-  border-bottom: 1px solid rgba(80, 80, 80, 1);
+  border-bottom: 1px solid var(--border-secondary);
   padding: 8px 16px;
-  color: rgba(170, 170, 170, 1);
+  color: var(--color-secondary);
 `;
 
 const Notice = styled.small`
   display: block;
-  color: rgba(170, 170, 170, 1);
+  color: var(--color-secondary);
   text-align: center;
 `;
 

@@ -6,6 +6,28 @@ import Dialog from "./components/Dialog";
 import Map from "./components/Map";
 
 const GlobalStyle = createGlobalStyle`
+  :root {
+    --background-primary: rgba(250, 250, 250, 0.9);
+    --background-secondary: #ebebeb;
+    --background-selected: rgba(170, 170, 170, 0.25);
+    --color-primary: #000000;
+    --color-secondary: #868686;
+    --border-primary: #d2d2d2;
+    --border-secondary: #e6e6e6;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background-primary: rgba(50, 50, 50, 0.9);
+      --background-secondary: #464646;
+      --background-selected: rgba(170, 170, 170, 0.25);
+      --color-primary: #ffffff;
+      --color-secondary: #aaaaaa;
+      --border-primary: #7f7f7f;
+      --border-secondary: #505050;
+    }
+  }
+
   * {
     font-family: Inter;
   }
