@@ -4,6 +4,7 @@
   "description": "Earthquake Tracker",
   "scripts": {
     "test": "jest --coverage",
+    "coverage": "open coverage/lcov-report/index.html",
     "compile:development:dll": "webpack --config webpack.config.dll.ts --mode=development",
     "compile:development:source": "webpack --mode=development",
     "compile:production:dll": "webpack --config webpack.config.dll.ts --mode=production",

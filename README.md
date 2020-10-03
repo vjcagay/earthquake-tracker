@@ -1,115 +1,110 @@
-# Webpack Typescript
-This is a boilerplate code that can get you started for developing applications written in [TypeScript](http://www.typescriptlang.org).
+# Earthquake Tracker
 
-## What's Included?
-This boilerplate is designed to be as simplistic as it can be so that you can add more features yourself without much trouble:
+This is a project to show the earthquake events recorded daily. It pulls earthquake data from [earthquake.usgs.gov](https://earthquake.usgs.gov/).
 
-- Build with [webpack](https://webpack.js.org) 4
-- [Styled-Components](https://www.styled-components.com) support
-- Separate output files for vendor libraries using webpack's [DLLPlugin](https://webpack.js.org/plugins/dll-plugin)
-- [Hot Module Replacement ](https://webpack.js.org/concepts/hot-module-replacement) on the development server
-- Linting using [ESLint](https://eslint.org)
-- Unit Testing using [Jest](https://facebook.github.io/jest/)
+It only shows records from earthquakes magnitudes 3 and up (humans can actually feel).
 
-## What's Not Included?
-Since there are a plethora of options out there I would like you to decide for yourself for these kind of stuff:
+You can access it live via Heroku [here](https://earthquake-tracker-develop.herokuapp.com/).
 
-- Linting CSS
-- Git commit hooks (e.g. must pass unit tests first before allowing push)
-- Fancy commit message formats
-- Continuous Integration services
+## Screenshots
 
-I might add these features above into the boilerplate in the future or by popular demand.
+It offers both light and dark modes and will automatically adapt to your system's (or browser's) color scheme.
+
+Light Mode
+![Light Mode](img/light.png)
+
+Dark Mode
+![Dark Mode](img/dark.png)
+
+## Usage
+
+- On first load, the app will show the records on the current day (based on your timezone).
+- Clicking the date will open up a calendar and the user can select a date. The app will then show the records on the selected date.
+- Clicking on one of the records will open a popup on the map on the location where it took place.
+- Clicking on one of the markers on the map will display a popup about the event and will also highlight it on the list.
+- The size of the marker shows the strength of the earthquake at the time it was recorded.
+
+## Technologies Used
+
+Designed to be run inside the browser, it primarily uses Web technologies:
+
+- Mapbox to render the map
+- Tooling with Webpack 4
+- Built with TypeScript and React
+- Styling with Styled-Components
+- Hot reloading for development using Hot Module Replacement on the development server
+- Linting using ESLint
+- Unit Testing using Jest
+
+## Requirements
+
+- Node.js (12+)
 
 ## Setup
-Clone this repo with your application name as the second argument:
-```bash
-$ git clone https://github.com/vjcagay/webpack-typescript-styled-components.git <application-name>
-$ cd <application-name>
-```
-
-Then delete this repo's git history and initialize a new one.
-
-Afterwards, `npm install` to install the dependencies.
-
-To access the development server, run `npm start` then go to `http://localhost:8080` in your web browser.
-
-## Vendor Libraries/DLL
-To make compiles faster, you can separate the vendor libraries from application code by importing them inside `src/ts/dll.ts`. You will still need to import them in your code so that webpack can reference them from the vendor library manifest.
-
-Example:
-```typescript
-// index.tsx
-import * as React from "react";
-import styled from "styled-components";
-```
-
-```typescript
-// dll.ts
-import "react";
-import "styled-components";
-```
-
-Therefore you need to compile the vendor libraries first before your application code. These have been already setup for both the development and production environments so all you need to do is:
 
 ```bash
-$ # Development: output will be on ./dev folder
-$ # Remember: The order matters!
-$ npm run compile:development:dll # compile the vendor libraries
-$ npm run compile:development:source # compile application code
+$ git clone https://github.com/vjcagay/earthquake-tracker.git
+
+$ cd earthquake-tracker
+
+$ npm install
+
+# Development: output will be on ./dev folder
+# Remember: The order matters!
+
+# Compile the vendor libraries
+$ npm run compile:development:dll
+
+# Compile application code
+$ npm run compile:development:source
+
+# Start dev server on http://localhost:8080
+$ npm start
+
+
+# Production: output will be on ./dist folder
+# Remember: The order matters!
+
+# Compile the vendor libraries
+$ npm run compile:production:dll
+
+# Compile application code
+$ npm run compile:production:source
+
+# Optional: start http server to serve files
+$ npx http-server dist
 ```
+
+## Development
 
 ```bash
-$ # Production: output will be on ./dist folder
-$ # Remember: The order matters!
-$ npm run compile:production:dll # compile the vendor libraries
-$ npm run compile:production:source # compile application code
+# To perform linting
+$ npm run lint
+
+# To run tests
+$ npm test
+
+# After running the tests you can view the coverage in the browser
+$ npm run coverage
 ```
 
-## Other stuff
-- You don't need to run `npm run compile:<environment>:dll` all the time but only when you add/remove libraries on `src/ts/dll.ts`.
-- Update `package.json` and modify the necessary fields you need to fit your application.
-- Modify `tsconfig.json` to add/remove TypeScript-specific features.
-- Since `v7.0.0` of `ts-node` do not use `include` in `ts-config` anymore. That means if you update to this version and you have custom type definition files (e.g. you made a custom typing for a library that does not have one) `ts-node` will fail to discover them and spit the `error TS7016`. To solve this problem, you must move from `include` to `paths` inside `compilerOptions`. Remember to also set your `baseUrl` first before you can use `paths`.
+## Deployment
 
-  Before `ts-node v7.0.0`
-  ```json
-    {
-      "compilerOptions": {},
-      "exclude": [],
-      "include": [
-        "this-does-not-work-anymore.d.ts",
-      ]
-    }
-  ```
-  After `ts-node v7.0.0`
-  ```json
-    // After ts-node v7.0.0
-    {
-      "compilerOptions": {
-        "baseUrl": ".",
-        "paths": {
-          "this-typing-works": ["this-typing-works.d.ts"]
-        }
-      },
-      "exclude": [],
-      "include": []
-    }
-  ```
-
-## Notes for Visual Studio Code Users
-To enable ESLint for TypeScript files, configure the plugin to:
-```json
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ]
+```bash
+# Deploy to Heroku
+# Make sure to set the config var before pushing anything
+# NPM_CONFIG_PRODUCTION = false
+$ git push heroku master
 ```
 
-## Contributing
-Please file an issue if you find a bug or have concerns or make a pull request if you like some sensible changes!
+## Optimization
+
+- Currently compiling in production mode will perform minification to TypeScript files. Using gzip further compresses bundles down to just 17% of their minified sizes.
+
+- CSS for some libraries used in this project are served from their respective CDNs to further lower down the bundle sizes. See [`src/html/index.html`](src/html/index.html).
 
 ## Author
-© [vjcagay](https://github.com/vjcagay), Released under the [MIT](https://github.com/vjcagay/webpack-typescript/blob/master/LICENSE) license.
+
+© [vjcagay](https://github.com/vjcagay)
+
+WebPack boilerplate code used in this project: https://github.com/vjcagay/webpack-typescript-styled-components
