@@ -55,9 +55,17 @@ const DropDown = styled.div`
     text-decoration: none;
   }
 
+  .pika-table td {
+    text-align: center;
+  }
+
   .pika-button {
     background: transparent;
     text-align: center;
+    display: initial;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
   }
 
   .is-today .pika-button,
@@ -93,6 +101,19 @@ const DropDown = styled.div`
   }
 `;
 
+const Controls = styled.div`
+  margin-top: 8px;
+  text-align: center;
+
+  button {
+    border: none;
+    outline: none;
+    background: transparent;
+    color: rgba(170, 170, 170, 1);
+    cursor: pointer;
+  }
+`;
+
 let pikaday: Pikaday;
 
 const Calendar = (props: Props) => {
@@ -101,7 +122,7 @@ const Calendar = (props: Props) => {
 
   const container = useRef<HTMLInputElement>(null);
   const input = useRef<HTMLInputElement>(null);
-  const dropDown = useRef<HTMLDivElement>(null);
+  const calendarMount = useRef<HTMLDivElement>(null);
 
   const isClickOutside = (event: MouseEvent) => {
     if (!container.current.contains(event.target as HTMLElement)) {
@@ -120,7 +141,7 @@ const Calendar = (props: Props) => {
           props.onChange?.(value);
         },
       });
-      dropDown.current.appendChild(pikaday.el);
+      calendarMount.current.appendChild(pikaday.el);
       document.body.addEventListener("click", isClickOutside);
     } else {
       pikaday?.destroy();
@@ -130,10 +151,21 @@ const Calendar = (props: Props) => {
     return () => document.body.removeEventListener("click", isClickOutside);
   }, [open]);
 
+  const goToToday = () => {
+    pikaday?.gotoToday();
+  };
+
   return (
     <Container className={props.className} ref={container}>
       <Input value={value} ref={input} onClick={() => setOpen(true)} />
-      {open && <DropDown ref={dropDown} />}
+      {open && (
+        <DropDown>
+          <div ref={calendarMount} />
+          <Controls>
+            <button onClick={goToToday}>Go to Today</button>
+          </Controls>
+        </DropDown>
+      )}
     </Container>
   );
 };
