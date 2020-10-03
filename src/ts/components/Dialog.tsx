@@ -27,7 +27,7 @@ const Container = styled.div`
 
 const List = styled.ul`
   flex-grow: 1;
-  overflow: scroll;
+  overflow-y: scroll;
   border: 1px solid var(--border-primary);
   border-left: none;
   border-right: none;
