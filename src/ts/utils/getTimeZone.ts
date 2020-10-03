@@ -1,4 +1,4 @@
-export default () => {
+export default (): string => {
   const rawTimeZone = new Date().toTimeString().split(" ")[1];
   const offsetSign = rawTimeZone.substring(3, 4);
   const offsetHour = rawTimeZone.substring(4, 6);

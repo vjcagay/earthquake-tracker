@@ -1,4 +1,4 @@
-declare var __MAP_ACCESS_TOKEN__: string;
+declare let __MAP_ACCESS_TOKEN__: string;
 
 interface Feature {
   geometry: {
