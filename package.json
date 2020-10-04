@@ -13,7 +13,7 @@
     "lint": "eslint . --ext .ts"
   },
   "author": "Vincent John Cagay",
-  "license": "UNLICENSED",
+  "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "http-server": "^0.12.3",
     "mapbox-gl": "^1.12.0",
@@ -73,5 +73,14 @@
       "json",
       "node"
     ]
-  }
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vjcagay/earthquake-tracker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vjcagay/earthquake-tracker/issues"
+  },
+  "homepage": "https://github.com/vjcagay/earthquake-tracker#readme"
 }
