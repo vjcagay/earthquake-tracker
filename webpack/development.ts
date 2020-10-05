@@ -29,7 +29,7 @@ const config = (dirPath: string): Configuration => {
       publicPath: "/",
     },
     plugins: [
-      new ReactRefreshWebpackPlugin(),
+      process.env.WEBPACK_DEV_SERVER && new ReactRefreshWebpackPlugin(),
       new DefinePlugin({
         __MAP_ACCESS_TOKEN__: JSON.stringify(development.mapAccessToken),
       }),
@@ -48,7 +48,7 @@ const config = (dirPath: string): Configuration => {
         scripts: ["libs.js"],
         publicPath: "/",
       }),
-    ],
+    ].filter(Boolean),
   };
 };
 
